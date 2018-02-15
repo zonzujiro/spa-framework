@@ -1,3 +1,5 @@
+import Component from './framework/Component';
+
 import { getForecast } from './utils/api';
 import { bindAll, getMidnightWeather } from './utils';
 
@@ -5,11 +7,11 @@ import LocationSearch from './components/LocationSearch';
 import TodayForecast from './components/TodayForecast';
 import WeekForecast from './components/WeekForecast';
 
-class App {
-  constructor(root) {
-    const city = new URLSearchParams(window.location.search).get('city');
+class App extends Component {
+  constructor({ root, city }) {
+    super();
 
-    this._state = {
+    this.state = {
       inputValue: city || '',
       hasError: false,
       isValid: true,
@@ -23,28 +25,22 @@ class App {
       'handleSearchChange',
       'handleHistoryChange',
       'computeNextState',
-      'handleError'
+      'handleError',
+      'updateState'
     );
 
-    this._root = root;
+    this.root = root;
 
     this._todayForecast = new TodayForecast();
     this._weekForecast = new WeekForecast();
-    this._locationSearch = new LocationSearch({
-      onChange: this.handleSearchChange,
-      onSubmit: this.handleSearchSubmit,
-    });
+    this._locationSearch = new LocationSearch();
 
-    this.onCreation();
-  }
-
-  onCreation() {
-    if (!!this._state.inputValue) {
-      this.getCityForecast(this._state.inputValue).then(nextState => {
+    if (!!city) {
+      this.getCityForecast(city).then(state => {
         window.history.replaceState(
-          nextState,
+          state,
           null,
-          `?city=${nextState.todayForecast.name}`
+          `?city=${state.todayForecast.name}`
         );
       });
     }
@@ -54,20 +50,8 @@ class App {
     });
   }
 
-  onBeforeUpdate(state, nextState) {}
-
-  updateState(state) {
-    const nextState = Object.assign({}, this._state, state);
-
-    this.onBeforeUpdate(this._state, nextState);
-    this._state = nextState;
-    this.render();
-
-    return nextState;
-  }
-
   handleSearchChange(inputValue) {
-    this._state.inputValue = inputValue;
+    this.state.inputValue = inputValue;
   }
 
   handleHistoryChange({ state }) {
@@ -95,15 +79,14 @@ class App {
   }
 
   handleSearchSubmit() {
-    const city = this._state.inputValue.trim();
+    const city = this.state.inputValue.trim();
 
     if (!this.isValidCityName(city)) {
       this.updateState({ isValid: false });
       return;
     }
 
-    this.updateState({ isLoading: true });
-    this.getCityForecast(city).then(stateSlice => {
+    this.getCityForecast(city).then(state => {
       window.history.pushState(
         state,
         null,
@@ -113,6 +96,8 @@ class App {
   }
 
   getCityForecast(city) {
+    this.updateState({ isLoading: true });
+
     return getForecast(city)
       .then(this.computeNextState)
       .then(this.updateState)
@@ -126,26 +111,28 @@ class App {
       weekForecast,
       isValid,
       inputValue,
-    } = this._state;
+    } = this.state;
 
-    const cloned = this._root.cloneNode();
+    const cloned = this.root.cloneNode();
     const toRender = [
-      this._locationSearch.render({
+      this._locationSearch.update({
         isValid,
         inputValue,
+        onChange: this.handleSearchChange,
+        onSubmit: this.handleSearchSubmit,
       }),
     ];
 
     if (!isLoading && todayForecast && weekForecast) {
       toRender.push(
-        this._todayForecast.render({ forecast: todayForecast }),
-        this._weekForecast.render({ forecast: weekForecast })
+        this._todayForecast.update({ forecast: todayForecast }),
+        this._weekForecast.update({ forecast: weekForecast })
       );
     }
 
     cloned.append(...toRender);
-    this._root.replaceWith(cloned);
-    this._root = cloned;
+    this.root.replaceWith(cloned);
+    this.root = cloned;
   }
 }
 

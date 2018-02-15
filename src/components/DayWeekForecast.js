@@ -1,24 +1,17 @@
+import Component from '../framework/Component';
+
 import { noop, toHtml } from '../utils';
 
-class DayWeekForecast {
-  constructor() {}
+const DayWeekForecast = ({ main }) => {
+  const { temp, humidity, pressure } = main;
 
-  render({ main }) {
-    const container = document.createElement('div');
-    container.classList.add('weekday-forecast-container');
-
-    const innerHtml = `
-      <div class='forecast'>
-        <h3 class='temperature'>${main.temp} F</h3>
-        <p class='humidity'>humidity: ${main.humidity}</p>
-        <p class='pressure'>pressure: ${main.pressure}</p>
-      </div>
-    `;
-
-    container.append(toHtml(innerHtml));
-
-    return container;
-  }
-}
+  return `
+    <div class='forecast'>
+      <h3 class='temperature'>${temp} F</h3>
+      <p class='humidity'>humidity: ${humidity}</p>
+      <p class='pressure'>pressure: ${pressure}</p>
+    </div>
+  `;
+};
 
 export default DayWeekForecast;

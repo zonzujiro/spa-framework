@@ -1,3 +1,10 @@
-.location-search .location-search-input.-invalid {
-  border: red;
+.location-search.-invalid .location-search-input {
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(207, 68, 88, 0.58);
+  border: solid 1px #cf4458;
+  color: #cf4458;
+}
+
+.location-search.-invalid .location-search-input:focus {
+  outline: none;
 }

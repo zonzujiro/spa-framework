@@ -1,13 +1,17 @@
+import Component from '../framework/Component';
+
 import { noop, toHtml } from '../utils';
 
-class TodayForecast {
-  constructor() {}
+class TodayForecast extends Component {
+  constructor() {
+    super();
 
-  render({ forecast }) {
-    const { name, main } = forecast;
+    this.root = document.createElement('div');
+    this.root.classList.add('today-forecast-container');
+  }
 
-    const container = document.createElement('div');
-    container.classList.add('today-forecast-container');
+  render() {
+    const { name, main } = this.props.forecast;
 
     const innerHtml = `
       <h1 class='city-name'>${name}</h1>
@@ -18,9 +22,9 @@ class TodayForecast {
       </div>
     `;
 
-    container.append(toHtml(innerHtml));
+    // container.append(toHtml(innerHtml));
 
-    return container;
+    return innerHtml;
   }
 }
 

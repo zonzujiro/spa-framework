@@ -9,6 +9,17 @@ export const toHtml = string => {
   return template.content;
 };
 
+export const clearChildren = node => {
+  node.innerHTML = '';
+  return node;
+};
+
+export const append = (node, child) => {
+  node.append(child);
+
+  return node;
+};
+
 export const bindAll = (context, ...names) => {
   names.forEach(name => {
     if (typeof context[name] === 'function') {

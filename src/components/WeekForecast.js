@@ -1,19 +1,24 @@
+import Component from '../framework/Component';
+
 import { noop, toHtml } from '../utils';
 
 import DayWeekForecast from './DayWeekForecast';
 
-class WeekForecast {
+class WeekForecast extends Component {
   constructor() {
-    this._weekDayForecast = new DayWeekForecast();
+    super();
+    // this._weekDayForecast = new DayWeekForecast();
+
+    this.root = document.createElement('div');
+    this.root.classList.add('week-forecast-container');
   }
 
-  render({ forecast }) {
-    const container = document.createElement('div');
-    container.classList.add('week-forecast-container');
+  render() {
+    const { forecast } = this.props;
 
-    container.append(...forecast.map(this._weekDayForecast.render));
+    // container.append(...forecast.map(this._weekDayForecast.render));
 
-    return container;
+    return forecast.map(DayWeekForecast).join('');
   }
 }
 

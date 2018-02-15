@@ -1,23 +1,35 @@
-// Import from utls
+import { toHtml, bindAll, clearChildren, append } from '../utils';
+
 class Component {
-  constructor(listeners, root) {
-    this._state = {};
-    this.onCreation();
+  constructor(props) {
+    this.state = {};
+    this.props = props || {};
+    this.root = null;
+
+    bindAll(this, 'updateState', 'update', '_render');
   }
 
-  onCreation() {}
-  onBeforeUpdate(state, nextState) {}
-  receiveProps(nextProps) {}
+  _render() {
+    return this.root
+      ? append(clearChildren(this.root), toHtml(this.render()))
+      : this.root;
+  }
+
+  update(nextProps) {
+    this.props = nextProps;
+    return this._render();
+  }
 
   updateState(state) {
-    const nextState = Object.assign({}, this._state, state);
+    const nextState = Object.assign({}, this.state, state);
 
-    this.onBeforeUpdate(this._state, nextState);
-    this._state = nextState;
-    this.render();
+    this.state = nextState;
+    this._render();
+
+    return nextState;
   }
 
   render() {}
 }
 
-export default App;
+export default Component;

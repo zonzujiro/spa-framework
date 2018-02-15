@@ -1,60 +1,63 @@
-import { noop, toHtml } from '../utils';
+import Component from '../framework/Component';
 
-class LocationSearch {
-  constructor({ onChange, onSubmit }) {
-    this._state = {
+import { noop, toHtml, bindAll, clearChildren } from '../utils';
+
+class LocationSearch extends Component {
+  constructor() {
+    super();
+
+    this.state = {
       isValid: true,
     };
 
-    this._domElement = null;
-    this._props = null;
+    bindAll(this, 'onChange', 'onSubmit');
 
-    this._onChange = onChange;
-    this._onSubmit = onSubmit;
+    this.root = document.createElement('div');
+    this.root.classList.add('location-search-container');
+    this.root.addEventListener('input', this.onChange);
+    this.root.addEventListener('click', this.onSubmit);
   }
 
-  doRender(props) {
-    this._props = Object.assign({}, props);
-    this._domElement = this.createDomElement(props);
-
-    return this._domElement;
+  isValidCityName(name) {
+    return !!name && !/\d/.test(name);
   }
 
-  render(props) {
-    if (!this._props || this._props !== props) {
-      return this.doRender(props);
-    }
+  onChange({ target }) {
+    const { isValid } = this.props;
+    const city = target.value.trim();
 
-    return this._domElement;
-  }
+    if (this.isValidCityName(city)) {
+      this.props.onChange(city);
 
-  createDomElement({ isValid, inputValue }) {
-    const container = document.createElement('div');
-    container.classList.add('location-search-container');
-
-    container.addEventListener('change', ({ target }) => {
-      this._onChange(target.value);
-    });
-
-    container.addEventListener('click', ({ target }) => {
-      if (target.classList.contains('location-search-submit')) {
-        this._onSubmit();
+      if (!isValid) {
+        this.updateState({ isValid: true });
       }
-    });
+    } else {
+      this.updateState({ isValid: false });
+    }
+  }
 
-    const className = isValid
-      ? '"location-search -invalid"'
-      : '"location-search"';
+  onSubmit({ target }) {
+    if (
+      target.classList.contains('location-search-submit') &&
+      this.state.isValid
+    ) {
+      this.props.onSubmit();
+    }
+  }
 
-    const innerHtml = `
-      <div class=${className}>
+  render() {
+    const { isValid } = this.state;
+    const { inputValue, onChange, onSubmit } = this.props;
+
+    return `
+      <div class=${
+        !isValid ? '"location-search -invalid"' : '"location-search"'
+      }>
         <input type='text' placeholder='City name' class='location-search-input' value=${inputValue}>
         <button class='location-search-submit'>Find</button>
+        <button class='location-favorite'>Add to favorite</button>
       </div>`;
-
-    container.append(toHtml(innerHtml));
-
-    return container;
   }
 }
 
