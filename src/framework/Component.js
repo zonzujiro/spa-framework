@@ -4,7 +4,7 @@ class Component {
   constructor(props) {
     this.state = {};
     this.props = props || {};
-    this.root = null;
+    this.host = null;
 
     bindAll(this, 'updateState', 'update', '_render', 'onBeforeUpdate');
   }
@@ -12,14 +12,14 @@ class Component {
   _render() {
     const html = this.render();
 
-    if (!html && this.root) {
-      return this.root;
+    if (!html && this.host) {
+      return this.host;
     }
 
     if (typeof html === 'string') {
-      return append(clearChildren(this.root), toHtml(html));
+      return append(clearChildren(this.host), toHtml(html));
     } else {
-      return append(clearChildren(this.root), html);
+      return append(clearChildren(this.host), html);
     }
   }
 

@@ -1,4 +1,4 @@
-import Component from '../framework/Component';
+import { Component } from '../framework';
 
 import DayWeekForecast from './DayWeekForecast';
 
@@ -6,8 +6,8 @@ class WeekForecast extends Component {
   constructor() {
     super();
 
-    this.root = document.createElement('div');
-    this.root.classList.add('week-forecast-container');
+    this.host = document.createElement('div');
+    this.host.classList.add('week-forecast-container');
   }
 
   render() {

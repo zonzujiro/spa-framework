@@ -1,4 +1,4 @@
-import Component from './framework/Component';
+import { Component } from './framework';
 
 import { getForecast } from './utils/api';
 import { bindAll, getMidnightWeather } from './utils';
@@ -8,11 +8,11 @@ import TodayForecast from './components/TodayForecast';
 import WeekForecast from './components/WeekForecast';
 
 class App extends Component {
-  constructor({ root, city }) {
+  constructor({ root }) {
     super();
 
     this.state = {
-      inputValue: city || '',
+      inputValue: '',
       hasError: false,
       todayForecast: null,
       weekForecast: null,
@@ -27,7 +27,7 @@ class App extends Component {
       'updateState'
     );
 
-    this.root = root;
+    this.host = root;
 
     this._todayForecast = new TodayForecast();
     this._weekForecast = new WeekForecast();
@@ -55,9 +55,7 @@ class App extends Component {
   }
 
   handleError() {
-    this.updateState({
-      hasError: true,
-    });
+    this.updateState({ hasError: true });
   }
 
   computeNextState([today, week]) {

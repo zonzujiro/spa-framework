@@ -1,4 +1,4 @@
-import Component from '../framework/Component';
+import { Component } from '../framework';
 
 import { bindAll } from '../utils';
 
@@ -12,9 +12,9 @@ class LocationSearch extends Component {
 
     bindAll(this, 'onSubmit');
 
-    this.root = document.createElement('div');
-    this.root.classList.add('location-search-container');
-    this.root.addEventListener('submit', this.onSubmit);
+    this.host = document.createElement('div');
+    this.host.classList.add('location-search-container');
+    this.host.addEventListener('submit', this.onSubmit);
   }
 
   isValidCityName(name) {
