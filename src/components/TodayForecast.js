@@ -13,7 +13,7 @@ class TodayForecast extends Component {
   render() {
     const { name, main } = this.props.forecast;
 
-    const innerHtml = `
+    return `
       <h1 class='city-name'>${name}</h1>
       <div class='forecast'>
         <span class='temperature'>${main.temp}</span>
@@ -21,10 +21,6 @@ class TodayForecast extends Component {
         <span class='pressure'>${main.pressure}</span>
       </div>
     `;
-
-    // container.append(toHtml(innerHtml));
-
-    return innerHtml;
   }
 }
 

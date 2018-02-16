@@ -1,7 +1,3 @@
-import Component from '../framework/Component';
-
-import { noop, toHtml } from '../utils';
-
 const DayWeekForecast = ({ main }) => {
   const { temp, humidity, pressure } = main;
 

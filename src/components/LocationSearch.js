@@ -1,6 +1,6 @@
 import Component from '../framework/Component';
 
-import { noop, toHtml, bindAll, clearChildren } from '../utils';
+import { bindAll } from '../utils';
 
 class LocationSearch extends Component {
   constructor() {
@@ -10,26 +10,26 @@ class LocationSearch extends Component {
       isValid: true,
     };
 
-    bindAll(this, 'onChange', 'onSubmit');
+    bindAll(this, 'onSubmit');
 
     this.root = document.createElement('div');
     this.root.classList.add('location-search-container');
-    this.root.addEventListener('input', this.onChange);
-    this.root.addEventListener('click', this.onSubmit);
+    this.root.addEventListener('submit', this.onSubmit);
   }
 
   isValidCityName(name) {
     return !!name && !/\d/.test(name);
   }
 
-  onChange({ target }) {
-    const { isValid } = this.props;
-    const city = target.value.trim();
+  onSubmit(ev) {
+    ev.preventDefault();
+
+    const city = ev.target.elements.city.value.trim();
 
     if (this.isValidCityName(city)) {
-      this.props.onChange(city);
+      this.props.onSubmit(city);
 
-      if (!isValid) {
+      if (!this.state.isValid) {
         this.updateState({ isValid: true });
       }
     } else {
@@ -37,27 +37,18 @@ class LocationSearch extends Component {
     }
   }
 
-  onSubmit({ target }) {
-    if (
-      target.classList.contains('location-search-submit') &&
-      this.state.isValid
-    ) {
-      this.props.onSubmit();
-    }
-  }
-
   render() {
     const { isValid } = this.state;
-    const { inputValue, onChange, onSubmit } = this.props;
+    const { inputValue } = this.props;
 
     return `
-      <div class=${
+      <form class=${
         !isValid ? '"location-search -invalid"' : '"location-search"'
       }>
-        <input type='text' placeholder='City name' class='location-search-input' value=${inputValue}>
+        <input required name='city' type='text' placeholder='City name' class='location-search-input' value=${inputValue}>
         <button class='location-search-submit'>Find</button>
-        <button class='location-favorite'>Add to favorite</button>
-      </div>`;
+        <button type='button' class='location-favorite'>Add to favorite</button>
+      </form>`;
   }
 }
 

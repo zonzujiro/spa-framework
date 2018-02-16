@@ -9,9 +9,17 @@ class Component {
     bindAll(this, 'updateState', 'update', '_render');
   }
 
+  init() {
+    if (Array.isArray(this.props.children)) {
+      this.props.children.forEach(child => child.init());
+    }
+  }
+
   _render() {
-    return this.root
-      ? append(clearChildren(this.root), toHtml(this.render()))
+    const htmlTag = this.render();
+
+    return this.root && !!htmlTag
+      ? append(clearChildren(this.root), toHtml(htmlTag))
       : this.root;
   }
 
