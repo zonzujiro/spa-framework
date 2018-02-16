@@ -6,24 +6,27 @@ class Component {
     this.props = props || {};
     this.root = null;
 
-    bindAll(this, 'updateState', 'update', '_render');
-  }
-
-  init() {
-    if (Array.isArray(this.props.children)) {
-      this.props.children.forEach(child => child.init());
-    }
+    bindAll(this, 'updateState', 'update', '_render', 'onBeforeUpdate');
   }
 
   _render() {
-    const htmlTag = this.render();
+    const html = this.render();
 
-    return this.root && !!htmlTag
-      ? append(clearChildren(this.root), toHtml(htmlTag))
-      : this.root;
+    if (!html && this.root) {
+      return this.root;
+    }
+
+    if (typeof html === 'string') {
+      return append(clearChildren(this.root), toHtml(html));
+    } else {
+      return append(clearChildren(this.root), html);
+    }
   }
 
+  onBeforeUpdate(nextProps) {}
+
   update(nextProps) {
+    this.onBeforeUpdate(nextProps);
     this.props = nextProps;
     return this._render();
   }

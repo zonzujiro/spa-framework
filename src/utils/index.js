@@ -15,7 +15,13 @@ export const clearChildren = node => {
 };
 
 export const append = (node, child) => {
-  node.append(child);
+  if (Array.isArray(child)) {
+    node.append(...child);
+  } else {
+    node.append(child);
+  }
+
+  console.log(node);
 
   return node;
 };

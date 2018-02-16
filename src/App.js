@@ -38,6 +38,18 @@ class App extends Component {
     });
   }
 
+  onBeforeUpdate({ city }) {
+    if (!!city) {
+      this.getCityForecast(city).then(state => {
+        window.history.replaceState(
+          state,
+          null,
+          `?city=${state.todayForecast.name}`
+        );
+      });
+    }
+  }
+
   handleHistoryChange({ state }) {
     this.updateState(state);
   }
@@ -72,26 +84,9 @@ class App extends Component {
       .catch(this.handleError);
   }
 
-  start() {
-    const { inputValue } = this.state;
-
-    if (!!inputValue) {
-      this.getCityForecast(inputValue).then(state => {
-        window.history.replaceState(
-          state,
-          null,
-          `?city=${state.todayForecast.name}`
-        );
-      });
-    } else {
-      this.render();
-    }
-  }
-
   render() {
     const { todayForecast, weekForecast, inputValue } = this.state;
 
-    const cloned = this.root.cloneNode();
     const toRender = [
       this._locationSearch.update({
         inputValue,
@@ -106,9 +101,7 @@ class App extends Component {
       );
     }
 
-    cloned.append(...toRender);
-    this.root.replaceWith(cloned);
-    this.root = cloned;
+    return toRender;
   }
 }
 
