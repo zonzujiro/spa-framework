@@ -3,13 +3,13 @@ import LoginForm from './components/LoginForm';
 
 export default [
   {
-    href: '#/',
+    href: '/',
     component: App,
     onEnter: () => {},
     redirectTo: '/login',
   },
   {
-    href: '#/login',
+    href: '/:id',
     component: LoginForm,
     onEnter: () => {},
   },

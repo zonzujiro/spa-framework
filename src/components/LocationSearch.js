@@ -49,7 +49,7 @@ class LocationSearch extends Component {
         <button class='location-search-submit'>Find</button>
         <button type='button' class='location-favorite'>Add to favorite</button>
       </form>
-      <a href='#/login'>Login</a>
+      <a href='#/login/13/46'>Login</a>
     `;
   }
 }
