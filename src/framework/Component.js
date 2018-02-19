@@ -6,7 +6,15 @@ class Component {
     this.props = props || {};
     this.host = null;
 
-    bindAll(this, 'updateState', 'update', '_render', 'onBeforeUpdate');
+    bindAll(
+      this,
+      'updateState',
+      'update',
+      '_render',
+      'onBeforeUpdate',
+      'onBeforeUnmount',
+      'onBeforeMount'
+    );
   }
 
   _render() {
@@ -23,7 +31,22 @@ class Component {
     }
   }
 
+  get name() {
+    return this.constructor.name;
+  }
+
   onBeforeUpdate(nextProps) {}
+  onBeforeUnmount() {}
+  onBeforeMount() {}
+
+  mount() {
+    this.onBeforeMount();
+    return this._render();
+  }
+
+  unmount() {
+    this.onBeforeUnmount();
+  }
 
   update(nextProps) {
     this.onBeforeUpdate(nextProps);

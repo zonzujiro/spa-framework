@@ -21,8 +21,6 @@ export const append = (node, child) => {
     node.append(child);
   }
 
-  console.log(node);
-
   return node;
 };
 

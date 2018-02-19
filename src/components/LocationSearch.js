@@ -48,7 +48,9 @@ class LocationSearch extends Component {
         <input required name='city' type='text' placeholder='City name' class='location-search-input' value=${inputValue}>
         <button class='location-search-submit'>Find</button>
         <button type='button' class='location-favorite'>Add to favorite</button>
-      </form>`;
+      </form>
+      <a href='#/login'>Login</a>
+    `;
   }
 }
 

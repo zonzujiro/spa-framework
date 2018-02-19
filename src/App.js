@@ -8,7 +8,7 @@ import TodayForecast from './components/TodayForecast';
 import WeekForecast from './components/WeekForecast';
 
 class App extends Component {
-  constructor({ root }) {
+  constructor() {
     super();
 
     this.state = {
@@ -27,7 +27,8 @@ class App extends Component {
       'updateState'
     );
 
-    this.host = root;
+    this.host = document.createElement('div');
+    this.host.classList.add('application-container');
 
     this._todayForecast = new TodayForecast();
     this._weekForecast = new WeekForecast();
@@ -38,7 +39,10 @@ class App extends Component {
     });
   }
 
-  onBeforeUpdate({ city }) {
+  onBeforeMount() {
+    const city = new URLSearchParams(window.location.search).get('city');
+    super.onBeforeMount();
+
     if (!!city) {
       this.getCityForecast(city).then(state => {
         window.history.replaceState(
