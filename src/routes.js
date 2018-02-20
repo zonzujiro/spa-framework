@@ -5,12 +5,9 @@ export default [
   {
     href: '/',
     component: App,
-    onEnter: () => {},
-    redirectTo: '/login',
   },
   {
-    href: '/login/:id',
+    href: '/login',
     component: LoginForm,
-    onEnter: () => {},
   },
 ];

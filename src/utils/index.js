@@ -55,7 +55,7 @@ const pathToRegexp = path => {
   return RegExp(`^${path.replace(URL_PARAM_REGEXP, '(.*)')}$`);
 };
 
-export const isEqualPath = (template, url) => {
+export const isEqualPaths = (template, url) => {
   return pathToRegexp(template).test(url);
 };
 

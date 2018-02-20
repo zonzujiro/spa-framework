@@ -37,10 +37,10 @@ class Component {
 
   onBeforeUpdate(nextProps) {}
   onBeforeUnmount() {}
-  onBeforeMount() {}
+  onBeforeMount(urlParams) {}
 
-  mount(urlProps) {
-    this.onBeforeMount(urlProps);
+  mount(urlParams) {
+    this.onBeforeMount(urlParams);
     return this._render();
   }
 
