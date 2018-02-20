@@ -1,15 +1,19 @@
 import Component from './Component';
 
-import { clearChildren, bindAll, pathToRegexp } from '../utils';
-
-// import pathToRegexp from 'path-to-regexp';
+import {
+  clearChildren,
+  bindAll,
+  isUrlParam,
+  isEqualPath,
+  extractUrlParams,
+} from '../utils';
 
 class Router extends Component {
   constructor(routes) {
     super();
 
     this.state = {
-      activetRoute: null,
+      activeRoute: null,
       activeComponent: null,
       routes,
     };
@@ -18,44 +22,20 @@ class Router extends Component {
 
     bindAll(this, 'applyRoute', 'handleUrlChange');
 
-    window.addEventListener('hashchange', ev => {
-      this.handleUrlChange(window.location.hash.slice(1));
-    });
-
-    this.handleUrlChange(window.location.hash.slice(1));
-    let keys = [];
-    let re = pathToRegexp('/user/:id/album/:userId');
-    console.log(re);
-    // console.log(re.exec('/user/13/album/14'));
-    console.log(this.compareRoute('/user/13/album', '/user/:id/album/:userId'));
+    window.addEventListener('hashchange', this.handleUrlChange);
+    this.handleUrlChange();
   }
 
-  compareRoute(url, template) {
-    return pathToRegexp(template).test(url);
+  get path() {
+    return window.location.hash.slice(1);
   }
 
-  extractParams(template, url) {
-    const values = url.split('/');
-    const params = {};
+  handleUrlChange() {
+    const { routes, activeRoute } = this.state;
+    const nextRoute = routes.find(({ href }) => isEqualPath(href, this.path));
 
-    return values
-      ? template.split('/').reduce((acc, param, index) => {
-          return Object.assign({}, acc, {
-            [param]: values[index],
-          });
-        }, params)
-      : params;
-  }
-
-  handleUrlChange(url) {
-    const { routes, activetRoute } = this.state;
-
-    const nextRoute = routes.find(({ href }) => href === url);
-
-    // console.log(this.extractParams(route.href, url));
-
-    if (nextRoute && activetRoute !== nextRoute) {
-      this.applyRoute(nextRoute, url);
+    if (nextRoute && activeRoute !== nextRoute) {
+      this.applyRoute(nextRoute, this.path);
     }
   }
 
@@ -68,13 +48,17 @@ class Router extends Component {
     }
 
     this.updateState({
-      activetRoute: route,
+      activeRoute: route,
       activeComponent: componentInstance,
     });
   }
 
   render() {
-    return this.state.activeComponent.mount();
+    const { href } = this.state.activeRoute;
+
+    return this.state.activeComponent.mount({
+      params: extractUrlParams(href, this.path),
+    });
   }
 }
 

@@ -9,7 +9,7 @@ export default [
     redirectTo: '/login',
   },
   {
-    href: '/:id',
+    href: '/login/:id',
     component: LoginForm,
     onEnter: () => {},
   },

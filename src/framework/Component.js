@@ -39,8 +39,8 @@ class Component {
   onBeforeUnmount() {}
   onBeforeMount() {}
 
-  mount() {
-    this.onBeforeMount();
+  mount(urlProps) {
+    this.onBeforeMount(urlProps);
     return this._render();
   }
 

@@ -1,4 +1,5 @@
 const MIDNIGHT_HOURS = '00:00:00';
+const URL_PARAM_REGEXP = /:\w+/g;
 
 export const noop = () => {};
 
@@ -49,4 +50,30 @@ RequestError.prototype.toString = function() {
   return `${this.code} - ${this.status}`;
 };
 
-export const pathToRegexp = path => RegExp(path.replace(/:\w+/g, '(.*)'));
+const isUrlParam = path => URL_PARAM_REGEXP.test(path);
+const pathToRegexp = path => {
+  return RegExp(`^${path.replace(URL_PARAM_REGEXP, '(.*)')}$`);
+};
+
+export const isEqualPath = (template, url) => {
+  return pathToRegexp(template).test(url);
+};
+
+export const extractUrlParams = (template, url) => {
+  const values = url.split('/');
+  const params = {};
+
+  if (!values) {
+    return params;
+  }
+
+  return template.split('/').reduce((acc, param, index) => {
+    if (!isUrlParam(param)) {
+      return acc;
+    }
+    //We need to remove ':' from param name
+    acc[param.slice(1)] = values[index];
+
+    return acc;
+  }, params);
+};
