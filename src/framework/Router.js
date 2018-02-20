@@ -1,8 +1,8 @@
 import Component from './Component';
 
-import { clearChildren, bindAll } from '../utils';
+import { clearChildren, bindAll, pathToRegexp } from '../utils';
 
-import pathToRegexp from 'path-to-regexp';
+// import pathToRegexp from 'path-to-regexp';
 
 class Router extends Component {
   constructor(routes) {
@@ -24,11 +24,15 @@ class Router extends Component {
 
     this.handleUrlChange(window.location.hash.slice(1));
     let keys = [];
-    let re = pathToRegexp('/users/:id', keys);
-    console.log(re.exec('/users/13'));
+    let re = pathToRegexp('/user/:id/album/:userId');
+    console.log(re);
+    // console.log(re.exec('/user/13/album/14'));
+    console.log(this.compareRoute('/user/13/album', '/user/:id/album/:userId'));
   }
 
-  compareRoute() {}
+  compareRoute(url, template) {
+    return pathToRegexp(template).test(url);
+  }
 
   extractParams(template, url) {
     const values = url.split('/');

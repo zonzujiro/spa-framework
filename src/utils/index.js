@@ -48,3 +48,5 @@ export function RequestError(response) {
 RequestError.prototype.toString = function() {
   return `${this.code} - ${this.status}`;
 };
+
+export const pathToRegexp = path => RegExp(path.replace(/:\w+/g, '(.*)'));
