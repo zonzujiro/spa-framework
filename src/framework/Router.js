@@ -56,14 +56,17 @@ class Router extends Component {
     const { href } = nextRoute;
     const params = extractUrlParams(href, url);
 
-    Promise.resolve(nextRoute.onEnter(nextRoute, params)).then(() => {
-      this.applyRoute(nextRoute, url);
-    });
+    nextRoute.onEnter(params, this.handleRedirect, nextRoute);
   }
 
   applyRoute(route, url) {
+    const { href } = route;
     const { activeComponent } = this.state;
-    const componentInstance = new route.component();
+
+    const componentInstance = new route.component({
+      params: extractUrlParams(href, this.path),
+      replace: this.handleRedirect,
+    });
 
     if (activeComponent) {
       activeComponent.unmount();
@@ -76,11 +79,7 @@ class Router extends Component {
   }
 
   render() {
-    const { href } = this.state.activeRoute;
-
-    return this.state.activeComponent.mount({
-      params: extractUrlParams(href, this.path),
-    });
+    return this.state.activeComponent.update();
   }
 }
 

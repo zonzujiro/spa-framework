@@ -51,12 +51,10 @@ RequestError.prototype.toString = function() {
 };
 
 const isUrlParam = path => URL_PARAM_REGEXP.test(path);
-const pathToRegexp = path => {
-  return RegExp(`^${path.replace(URL_PARAM_REGEXP, '(.*)')}$`);
-};
+const urlToRegExp = url => RegExp(`^${url.replace(URL_PARAM_REGEXP, '(.*)')}$`);
 
 export const isEqualPaths = (template, url) => {
-  return pathToRegexp(template).test(url);
+  return urlToRegExp(template).test(url);
 };
 
 export const extractUrlParams = (template, url) => {

@@ -39,9 +39,8 @@ class App extends Component {
     });
   }
 
-  onBeforeMount() {
+  onBeforeUpdate() {
     const city = new URLSearchParams(window.location.search).get('city');
-    super.onBeforeMount();
 
     if (!!city) {
       this.getCityForecast(city).then(state => {

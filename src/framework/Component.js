@@ -12,8 +12,7 @@ class Component {
       'update',
       '_render',
       'onBeforeUpdate',
-      'onBeforeUnmount',
-      'onBeforeMount'
+      'onBeforeUnmount'
     );
   }
 
@@ -37,12 +36,6 @@ class Component {
 
   onBeforeUpdate(nextProps) {}
   onBeforeUnmount() {}
-  onBeforeMount(urlParams) {}
-
-  mount(urlParams) {
-    this.onBeforeMount(urlParams);
-    return this._render();
-  }
 
   unmount() {
     this.onBeforeUnmount();
