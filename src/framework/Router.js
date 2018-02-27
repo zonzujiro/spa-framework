@@ -60,10 +60,10 @@ class Router extends Component {
   }
 
   applyRoute(route, url) {
-    const { href } = route;
+    const { href, component: Component } = route;
     const { activeComponent } = this.state;
 
-    const componentInstance = new route.component({
+    const componentInstance = new Component({
       params: extractUrlParams(href, this.path),
       replace: this.handleRedirect,
     });

@@ -6,14 +6,7 @@ class Component {
     this.props = props || {};
     this.host = null;
 
-    bindAll(
-      this,
-      'updateState',
-      'update',
-      '_render',
-      'onBeforeUpdate',
-      'onBeforeUnmount'
-    );
+    bindAll(this, 'updateState', 'update');
   }
 
   _render() {
