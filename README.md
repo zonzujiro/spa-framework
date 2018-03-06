@@ -7,4 +7,4 @@ Basic SPA for [kottans frontend course](https://github.com/kottans/frontend). Co
 `Router` have `onEnter` callback, understands `redirectTo` key. Also, can extract parameters from url and pass it to chidlren.
 
 ## Summary of workshop with homework
-telegra.ph/Itogi-seminara-03032018-03-06
+[Telegraph](http://telegra.ph/Itogi-seminara-03032018-03-06)
